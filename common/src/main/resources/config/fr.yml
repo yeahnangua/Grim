@@ -4,6 +4,12 @@
 # Les binaires modifiés, ou les plugins contenant du code grim copié, doivent être privés,
 # ou avec le code source complet disponible pour les acheteurs sans frais supplémentaires.
 
+# Global setback mode controls ALL setback behavior across all checks.
+# "setback" (default): normal behavior
+# "alert-only": detection and alerts only, no setbacks (force resyncs still active for stability)
+# "disabled": all setbacks and resyncs disabled (not recommended, may cause gameplay issues)
+global-setback-mode: setback
+
 alerts:
     # En plus de diffuser des alertes aux joueurs, doivent-elles également être afffichées dans console ?
     print-to-console: true
@@ -81,14 +87,14 @@ Simulation:
     # Cela vise à empêcher le joueur d'accumuler trop de violations et de ne jamais pouvoir toutes les réinitialiser.
     # Plafond d'avantage par défaut (l"axe x = secondes, l'axe y = 1/1000 de bloc)) : https://www.desmos.com/calculator/4lovswdarj
     max-ceiling: 4
-    # Seuil du niveau de violation pour le setback
-    # 1 pour le comportement ancien
-    setback-violation-threshold: 1
+    # Setback mode: "setback" (normal), "alert-only" (detect but never setback), "disabled" (skip check entirely)
+    setback-mode: setback
 
 # Vérifications pour voir si un joueur est entré dans un bloc pendant un mouvement.
 Phase:
     setbackvl: 1 # Rentrer dans des blocs peut permettre de grimper sur les murs, et cette vérification est relativement stable.
     decay: 0.005
+    setback-mode: setback
 
 AirLiquidPlace:
     cancelvl: 0
@@ -117,6 +123,7 @@ NoSlow:
     setbackvl: 5
     # Décroissance lorsque le joueur utilise un objet ET est ralenti par celui-ci.
     decay: 0.05
+    setback-mode: setback
 
 Knockback:
     # De combien devons-nous multiplier l'avantage total lorsque le joueur est légitime ?
@@ -132,17 +139,19 @@ Knockback:
     max-advantage: 1
     # Cela vise à empêcher le joueur d'accumuler trop de violations et de ne jamais pouvoir toutes les réinitialiser.
     max-ceiling: 4
-
+    setback-mode: setback
 
 Explosion:
     threshold: 0.001
     setbackvl: 3
+    setback-mode: setback
 
 TimerA:
     setbackvl: 10
     # Le nombre de millisecondes que le joueur peut accumuler pour une utilisation ultérieure lorsqu'il prend du retard.
     # Si la valeur est trop élevée, cela pourrait potentiellement permettre de contourner les mécaniques 1.8, comme l'utilisation rapide, la guérison rapide et le tir à l'arc rapide. Une valeur de 120 ms semble être un bon équilibre.
     drift: 120
+    setback-mode: setback
 
 # This check limits abuse of the TimerA balance by preventing the player's movement falling too far behind realtime
 TimerLimit:

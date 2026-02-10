@@ -27,9 +27,7 @@ public class SprintA extends Check implements PacketCheck {
                         event.setCancelled(true);
                         player.onPacketCancel();
                     }
-                    if (shouldSetback()) {
-                        player.getSetbackTeleportUtil().executeNonSimulatingSetback();
-                    }
+                    nonSimulatingSetbackIfAboveSetbackVL();
                 }
             } else {
                 reward();

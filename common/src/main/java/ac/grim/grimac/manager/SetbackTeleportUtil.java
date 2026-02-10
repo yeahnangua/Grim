@@ -2,6 +2,7 @@ package ac.grim.grimac.manager;
 
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.checks.Check;
+import ac.grim.grimac.checks.SetbackMode;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsN;
 import ac.grim.grimac.checks.type.PostPredictionCheck;
 import ac.grim.grimac.platform.api.entity.GrimEntity;
@@ -98,6 +99,7 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
         if (player.gamemode == GameMode.SPECTATOR || player.disableGrim)
             return; // We don't care about spectators, they don't flag
         if (lastKnownGoodPosition == null) return; // Player hasn't spawned yet
+        if (GrimAPI.INSTANCE.getConfigManager().getGlobalSetbackMode() == SetbackMode.DISABLED) return;
         blockMovementsUntilResync(true, true);
     }
 
@@ -105,6 +107,7 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
         if (player.gamemode == GameMode.SPECTATOR || player.disableGrim)
             return; // We don't care about spectators, they don't flag
         if (lastKnownGoodPosition == null) return; // Player hasn't spawned yet
+        if (GrimAPI.INSTANCE.getConfigManager().getGlobalSetbackMode() == SetbackMode.DISABLED) return;
         blockMovementsUntilResync(false, true);
     }
 
@@ -112,11 +115,13 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
         if (player.gamemode == GameMode.SPECTATOR || player.disableGrim)
             return; // We don't care about spectators, they don't flag
         if (lastKnownGoodPosition == null) return; // Player hasn't spawned yet
+        if (GrimAPI.INSTANCE.getConfigManager().getGlobalSetbackMode() != SetbackMode.SETBACK) return;
         blockMovementsUntilResync(false, false);
     }
 
     public boolean executeViolationSetback() {
         if (isExempt()) return false;
+        if (GrimAPI.INSTANCE.getConfigManager().getGlobalSetbackMode() != SetbackMode.SETBACK) return false;
         blockMovementsUntilResync(true, false);
         return true;
     }

@@ -6,6 +6,12 @@
 
 # "セットバック"は、Grimによってプレイヤーの違反が検知された際、プレイヤーを元の位置/状態に戻すことを意味します。
 
+# Global setback mode controls ALL setback behavior across all checks.
+# "setback" (default): normal behavior
+# "alert-only": detection and alerts only, no setbacks (force resyncs still active for stability)
+# "disabled": all setbacks and resyncs disabled (not recommended, may cause gameplay issues)
+global-setback-mode: setback
+
 alerts:
     # アラートを、プレイヤーに送信するだけでなくコンソールにも送信するかどうか。
     print-to-console: true
@@ -83,14 +89,14 @@ Simulation:
     # これは、プレイヤーが違反を蓄積しすぎて、違反を解消できなくなるのを防ぐためです。
     # デフォルトのアドバンテージの上限 (x軸 = 秒, y軸 = 1/1000ブロック): https://www.desmos.com/calculator/4lovswdarj
     max-ceiling: 4
-    # セットバックの違反レベル閾値
-    # 旧仕様の挙動は 1 です
-    setback-violation-threshold: 1
+    # Setback mode: "setback" (normal), "alert-only" (detect but never setback), "disabled" (skip check entirely)
+    setback-mode: setback
 
 # プレイヤーが移動中にブロックに入ったかどうかをチェックします。
 Phase:
     setbackvl: 1 # 1ブロック以上のズレがある場合に違反と判断します。
     decay: 0.005
+    setback-mode: setback
 
 AirLiquidPlace:
     cancelvl: 0
@@ -119,6 +125,7 @@ NoSlow:
     setbackvl: 5
     # プレイヤーがアイテム使用時に速度低下が発生する場合、この値によりアドバンテージの累積が減少します
     decay: 0.05
+    setback-mode: setback
 
 Knockback:
     # プレイヤーが違反していない場合、総アドバンテージにどれだけの倍率を掛けるか
@@ -134,10 +141,12 @@ Knockback:
     max-advantage: 1
     # 違反が過剰に蓄積し、リセットが難しくなるのを防ぐための上限です
     max-ceiling: 4
+    setback-mode: setback
 
 Explosion:
     threshold: 0.001
     setbackvl: 3
+    setback-mode: setback
 
 TimerA:
     setbackvl: 10
@@ -146,6 +155,7 @@ TimerA:
     # この値を高く設定しすぎると、1.8版の高速使用、高速回復、高速弓などの不正な動作をバイパスできる可能性があるため、
     # 120ミリ秒がバランスの良い設定とされています。
     drift: 120
+    setback-mode: setback
 
 # This check limits abuse of the TimerA balance by preventing the player's movement falling too far behind realtime
 TimerLimit:

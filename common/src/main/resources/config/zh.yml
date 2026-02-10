@@ -4,6 +4,12 @@
 # 修改过的二进制文件，或带有复制的Grim代码的插件，必须是私有仓库，不得公开售卖此插件。
 # 中文翻译提供 Regotly / nuym / Dg32z_ , 如有错误请提交 Issues 并@我
 
+# Global setback mode controls ALL setback behavior across all checks.
+# "setback" (default): normal behavior
+# "alert-only": detection and alerts only, no setbacks (force resyncs still active for stability)
+# "disabled": all setbacks and resyncs disabled (not recommended, may cause gameplay issues)
+global-setback-mode: setback
+
 alerts:
     # 除了向有权限的玩家发送作弊vl外，是否还在控制台中打印作弊vl消息？
     print-to-console: true
@@ -86,14 +92,14 @@ Simulation:
     # 这是为了防止玩家收集过多的违规行为，并且永远无法清除所有的违规行为
     # 这是默认配置的样子（x 轴 = seconds ，y 轴 = 1/1000 方块）: https://www.desmos.com/calculator/4lovswdarj
     max-ceiling: 4
-    # 设置回退的违规等级阈值
-    # 1 为旧行为
-    setback-violation-threshold: 1
+    # 回弹模式: "setback" (正常回弹), "alert-only" (仅检测告警不回弹), "disabled" (完全跳过检测)
+    setback-mode: setback
 
 # 检查玩家是否穿墙
 Phase:
     setbackvl: 1 # 错误的方块可以允许爬墙，加上这个检查是相对稳定的
     decay: 0.005
+    setback-mode: setback
 
 AirLiquidPlace:
     cancelvl: 0
@@ -121,6 +127,7 @@ NoSlow:
     setbackvl: 5
     # 当玩家使用一个物品并被它减慢时衰减多少VL
     decay: 0.05
+    setback-mode: setback
 
 Knockback:
     # 当玩家合法时，我们应该将总优势乘以多少
@@ -136,17 +143,20 @@ Knockback:
     max-advantage: 1
     # 这是为了防止玩家收集过多的违规行为，并且永远无法清除所有的违规行为
     max-ceiling: 4
+    setback-mode: setback
 
 
 Explosion:
     threshold: 0.001
     setbackvl: 3
+    setback-mode: setback
 
 TimerA:
     setbackvl: 10
     # 玩家卡顿时可以累积以供以后使用的毫秒数
     # 如果设置得太高，可能会允许 1.8 快速使用/快速治疗/快速弓箭绕过，120 毫秒似乎是一个很好的平衡
     drift: 120
+    setback-mode: setback
 
 # 此项是config是用来防止玩家移动与实时差距过大，来限制对 TimerA 平衡机制的滥用。
 TimerLimit:

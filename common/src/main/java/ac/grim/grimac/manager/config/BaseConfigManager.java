@@ -1,6 +1,7 @@
 package ac.grim.grimac.manager.config;
 
 import ac.grim.grimac.api.config.ConfigManager;
+import ac.grim.grimac.checks.SetbackMode;
 import ac.grim.grimac.utils.anticheat.LogUtil;
 import lombok.Getter;
 
@@ -36,6 +37,9 @@ public class BaseConfigManager {
     @Getter
     private boolean disablePongCancelling;
 
+    @Getter
+    private SetbackMode globalSetbackMode = SetbackMode.SETBACK;
+
     // initialize the config
     public void load(ConfigManager config) {
         this.config = config;
@@ -65,6 +69,8 @@ public class BaseConfigManager {
                 "<red>Your forge version is blacklisted due to inbuilt reach hacks.<newline><gold>Versions affected: 1.18.2-1.19.3<newline><newline><red>Please see https://github.com/MinecraftForge/MinecraftForge/issues/9309.");
 
         disablePongCancelling = config.getBooleanElse("disable-pong-cancelling", false);
+
+        globalSetbackMode = SetbackMode.fromString(config.getStringElse("global-setback-mode", "setback"));
     }
 
     // ran on start, can be used to handle things that can't be done while loading

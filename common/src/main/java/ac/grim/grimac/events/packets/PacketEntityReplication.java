@@ -396,7 +396,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                     for (int entityID : destroyEntityIds) {
                         // If the player has a firework boosting them, setback
                         if (player.fireworks.hasFirework(entityID)) {
-                            player.getSetbackTeleportUtil().executeViolationSetback();
+                            setbackIfAboveSetbackVL();
                             break;
                         }
                     }

@@ -4,6 +4,12 @@
 # Gewijzigde binaire bestanden, of plugins met gekopieerde Grim code, moeten privé zijn,
 # of met volledige broncode beschikbaar voor kopers zonder extra kosten.
 
+# Global setback mode controls ALL setback behavior across all checks.
+# "setback" (default): normal behavior
+# "alert-only": detection and alerts only, no setbacks (force resyncs still active for stability)
+# "disabled": all setbacks and resyncs disabled (not recommended, may cause gameplay issues)
+global-setback-mode: setback
+
 alerts:
     # Moeten er naast het uitzenden van waarschuwingen naar spelers ook waarschuwingen naar de console worden gestuurd?
     print-to-console: true
@@ -81,14 +87,14 @@ Simulation:
     # Dit is om te voorkomen dat de speler te veel schendingen verzamelt en ze nooit allemaal kan opruimen
     # Standaard voordelenplatform (x-as = seconden, y-as = 1/1000 blok): https://www.desmos.com/calculator/4lovswdarj
     max-ceiling: 4
-    # Drempelwaarde voor het schendingenniveau voor de terugslag
-    # 1 voor het oude gedrag
-    setback-violation-threshold: 1
+    # Setback mode: "setback" (normal), "alert-only" (detect but never setback), "disabled" (skip check entirely)
+    setback-mode: setback
 
 # Controleert of een speler een blok is binnengegaan tijdens een beweging
 Phase:
     setbackvl: 1 # Glitching in blokken kan muurklimmen mogelijk maken, plus deze controle is relatief stabiel
     decay: 0.005
+    setback-mode: setback
 
 AirLiquidPlace:
     cancelvl: 0
@@ -117,6 +123,7 @@ NoSlow:
     setbackvl: 5
     # Verval treedt op wanneer de speler een voorwerp gebruikt EN erdoor wordt vertraagd
     decay: 0.05
+    setback-mode: setback
 
 Knockback:
     # Met hoeveel moeten we het totale voordeel vermenigvuldigen als de speler legitiem is?
@@ -132,16 +139,19 @@ Knockback:
     max-advantage: 1
     # Dit is om te voorkomen dat de speler te veel overtredingen verzamelt en ze nooit allemaal kan verwijderen
     max-ceiling: 4
+    setback-mode: setback
 
 Explosion:
     threshold: 0.001
     setbackvl: 3
+    setback-mode: setback
 
 TimerA:
     setbackvl: 10
     # Milliseconden die de speler kan verzamelen om later te gebruiken als hij achterop raakt
     # Kan mogelijk 1.8 snel gebruik/snelle genezing/snelle bron omleidingen toestaan als het te hoog is ingesteld, 120 ms lijkt een goede balans
     drift: 120
+    setback-mode: setback
 
 # This check limits abuse of the TimerA balance by preventing the player's movement falling too far behind realtime
 TimerLimit:

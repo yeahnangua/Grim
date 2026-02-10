@@ -33,6 +33,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
 
     private boolean experimental;
     private @Setter boolean isEnabled;
+    private SetbackMode setbackMode = SetbackMode.SETBACK;
 
     private boolean exemptPermission;
     private boolean noSetbackPermission;
@@ -92,6 +93,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
     }
 
     public final boolean flag(String verbose) {
+        if (setbackMode == SetbackMode.DISABLED) return false;
         if (player.disableGrim || (experimental && !player.isExperimentalChecks()) || exemptPermission)
             return false; // Avoid calling event if disabled
 
@@ -140,7 +142,15 @@ public class Check extends GrimProcessor implements AbstractCheck {
         displayName = configuration.getStringElse(configName + ".displayname", checkName);
         description = configuration.getStringElse(configName + ".description", description);
 
+        String modeStr = configuration.getStringElse(configName + ".setback-mode", "setback");
+        setbackMode = SetbackMode.fromString(modeStr);
+
         if (setbackVL == -1) setbackVL = Double.MAX_VALUE;
+
+        if (setbackMode == SetbackMode.DISABLED) {
+            isEnabled = false;
+        }
+
         onReload(configuration);
     }
 
@@ -160,8 +170,15 @@ public class Check extends GrimProcessor implements AbstractCheck {
         return false;
     }
 
+    public void nonSimulatingSetbackIfAboveSetbackVL() {
+        if (shouldSetback()) {
+            player.getSetbackTeleportUtil().executeNonSimulatingSetback();
+        }
+    }
+
     public boolean shouldSetback() {
-        return !noSetbackPermission && violations > setbackVL;
+        return setbackMode == SetbackMode.SETBACK
+                && !noSetbackPermission && violations > setbackVL;
     }
 
     public String formatOffset(double offset) {

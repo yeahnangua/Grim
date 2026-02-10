@@ -20,7 +20,6 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
     private double immediateSetbackThreshold;
     private double maxAdvantage;
     private double maxCeiling;
-    private double setbackViolationThreshold;
     // Current advantage gained
     private double advantageGained = 0;
 
@@ -64,10 +63,8 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                         predictionComplete.setIdentifier(flagId);
                     }
 
-                    if ((advantageGained >= maxAdvantage || offset >= immediateSetbackThreshold)
-                            && !isNoSetbackPermission()
-                            && violations >= setbackViolationThreshold) {
-                        player.getSetbackTeleportUtil().executeViolationSetback();
+                    if ((advantageGained >= maxAdvantage || offset >= immediateSetbackThreshold)) {
+                        setbackIfAboveSetbackVL();
                     }
                 }
             }
@@ -104,7 +101,6 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
         immediateSetbackThreshold = config.getDoubleElse("Simulation.immediate-setback-threshold", 0.1);
         maxAdvantage = config.getDoubleElse("Simulation.max-advantage", 1);
         maxCeiling = config.getDoubleElse("Simulation.max-ceiling", 4);
-        setbackViolationThreshold = config.getDoubleElse("Simulation.setback-violation-threshold", 1);
         if (maxAdvantage == -1) maxAdvantage = Double.MAX_VALUE;
         if (immediateSetbackThreshold == -1) immediateSetbackThreshold = Double.MAX_VALUE;
     }

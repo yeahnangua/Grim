@@ -41,7 +41,7 @@ public class PacketPlayerAbilities extends Check implements PacketCheck {
                 if (maxFlyingPing != -1) {
                     player.runNettyTaskInMs(() -> {
                         if (player.lastTransactionReceived.get() < noFlying) {
-                            player.getSetbackTeleportUtil().executeViolationSetback();
+                            setbackIfAboveSetbackVL();
                         }
                     }, maxFlyingPing);
                 }
