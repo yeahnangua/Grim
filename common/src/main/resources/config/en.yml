@@ -244,4 +244,54 @@ history:
         username: root
         password: ""
 
-config-version: 9
+# ========== Check Category Controls ==========
+# Control entire categories of checks. Each category has:
+#   enabled: true/false - whether checks in this category run at all
+#   setback-mode: "inherit" (use global-setback-mode) / "setback" / "alert-only" / "disabled"
+# Priority: disable-checks > category setting > per-check setting > global-setback-mode
+checks:
+  movement:
+    enabled: true
+    setback-mode: inherit
+  elytra:
+    enabled: true
+    setback-mode: inherit
+  combat:
+    enabled: true
+    setback-mode: inherit
+  vehicle:
+    enabled: true
+    setback-mode: inherit
+  timer:
+    enabled: true
+    setback-mode: inherit
+  badpackets:
+    enabled: true
+    setback-mode: inherit
+  breaking:
+    enabled: true
+    setback-mode: inherit
+  placing:
+    enabled: true
+    setback-mode: inherit
+  packet-order:
+    enabled: true
+    setback-mode: inherit
+  multi-actions:
+    enabled: true
+    setback-mode: inherit
+  crash:
+    enabled: true
+    setback-mode: inherit
+  sprint:
+    enabled: true
+    setback-mode: inherit
+  chat:
+    enabled: true
+    setback-mode: inherit
+
+# Disable specific sub-checks by name (highest priority, overrides everything)
+# Example: ["ElytraF", "BadPacketsE", "FastBreak"]
+disable-checks: []
+
+config-version: 10

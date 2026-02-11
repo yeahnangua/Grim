@@ -61,13 +61,197 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 
+import ac.grim.grimac.checks.CheckCategory;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CheckManager {
     private static final AtomicBoolean initedAtomic = new AtomicBoolean(false);
     private static boolean inited;
+
+    private static final Map<Class<? extends AbstractCheck>, CheckCategory> CATEGORY_MAP;
+
+    static {
+        Map<Class<? extends AbstractCheck>, CheckCategory> map = new HashMap<>();
+
+        // MOVEMENT
+        map.put(OffsetHandler.class, CheckCategory.MOVEMENT);
+        map.put(NoSlow.class, CheckCategory.MOVEMENT);
+        map.put(Phase.class, CheckCategory.MOVEMENT);
+        map.put(GroundSpoof.class, CheckCategory.MOVEMENT);
+        map.put(NoFall.class, CheckCategory.MOVEMENT);
+
+        // ELYTRA
+        map.put(ElytraA.class, CheckCategory.ELYTRA);
+        map.put(ElytraB.class, CheckCategory.ELYTRA);
+        map.put(ElytraC.class, CheckCategory.ELYTRA);
+        map.put(ElytraD.class, CheckCategory.ELYTRA);
+        map.put(ElytraE.class, CheckCategory.ELYTRA);
+        map.put(ElytraF.class, CheckCategory.ELYTRA);
+        map.put(ElytraG.class, CheckCategory.ELYTRA);
+        map.put(ElytraH.class, CheckCategory.ELYTRA);
+        map.put(ElytraI.class, CheckCategory.ELYTRA);
+
+        // COMBAT
+        map.put(Reach.class, CheckCategory.COMBAT);
+        map.put(Hitboxes.class, CheckCategory.COMBAT);
+        map.put(MultiInteractA.class, CheckCategory.COMBAT);
+        map.put(MultiInteractB.class, CheckCategory.COMBAT);
+        map.put(AimModulo360.class, CheckCategory.COMBAT);
+        map.put(AimDuplicateLook.class, CheckCategory.COMBAT);
+        map.put(KnockbackHandler.class, CheckCategory.COMBAT);
+        map.put(ExplosionHandler.class, CheckCategory.COMBAT);
+
+        // VEHICLE
+        map.put(VehicleA.class, CheckCategory.VEHICLE);
+        map.put(VehicleB.class, CheckCategory.VEHICLE);
+        map.put(VehicleC.class, CheckCategory.VEHICLE);
+        map.put(VehicleD.class, CheckCategory.VEHICLE);
+        map.put(VehicleE.class, CheckCategory.VEHICLE);
+        map.put(VehicleF.class, CheckCategory.VEHICLE);
+        map.put(VehicleTimer.class, CheckCategory.VEHICLE);
+
+        // TIMER
+        map.put(Timer.class, CheckCategory.TIMER);
+        map.put(TickTimer.class, CheckCategory.TIMER);
+        map.put(TimerLimit.class, CheckCategory.TIMER);
+        map.put(NegativeTimer.class, CheckCategory.TIMER);
+
+        // BADPACKETS
+        map.put(BadPacketsA.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsB.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsC.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsD.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsE.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsF.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsG.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsH.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsI.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsJ.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsK.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsL.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsM.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsN.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsO.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsP.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsQ.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsR.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsS.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsT.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsU.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsV.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsW.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsX.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsY.class, CheckCategory.BADPACKETS);
+        map.put(BadPacketsZ.class, CheckCategory.BADPACKETS);
+
+        // BREAKING
+        map.put(AirLiquidBreak.class, CheckCategory.BREAKING);
+        map.put(WrongBreak.class, CheckCategory.BREAKING);
+        map.put(RotationBreak.class, CheckCategory.BREAKING);
+        map.put(FastBreak.class, CheckCategory.BREAKING);
+        map.put(MultiBreak.class, CheckCategory.BREAKING);
+        map.put(NoSwingBreak.class, CheckCategory.BREAKING);
+        map.put(FarBreak.class, CheckCategory.BREAKING);
+        map.put(InvalidBreak.class, CheckCategory.BREAKING);
+        map.put(PositionBreakA.class, CheckCategory.BREAKING);
+        map.put(PositionBreakB.class, CheckCategory.BREAKING);
+
+        // PLACING
+        map.put(InvalidPlaceA.class, CheckCategory.PLACING);
+        map.put(InvalidPlaceB.class, CheckCategory.PLACING);
+        map.put(AirLiquidPlace.class, CheckCategory.PLACING);
+        map.put(MultiPlace.class, CheckCategory.PLACING);
+        map.put(FarPlace.class, CheckCategory.PLACING);
+        map.put(FabricatedPlace.class, CheckCategory.PLACING);
+        map.put(PositionPlace.class, CheckCategory.PLACING);
+        map.put(RotationPlace.class, CheckCategory.PLACING);
+        map.put(DuplicateRotPlace.class, CheckCategory.PLACING);
+
+        // PACKET_ORDER
+        map.put(PacketOrderA.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderB.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderC.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderD.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderE.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderF.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderG.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderH.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderI.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderJ.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderK.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderL.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderM.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderN.class, CheckCategory.PACKET_ORDER);
+        map.put(PacketOrderO.class, CheckCategory.PACKET_ORDER);
+
+        // MULTI_ACTIONS
+        map.put(MultiActionsA.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsB.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsC.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsD.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsE.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsF.class, CheckCategory.MULTI_ACTIONS);
+        map.put(MultiActionsG.class, CheckCategory.MULTI_ACTIONS);
+
+        // CRASH (includes exploit checks)
+        map.put(CrashA.class, CheckCategory.CRASH);
+        map.put(CrashB.class, CheckCategory.CRASH);
+        map.put(CrashC.class, CheckCategory.CRASH);
+        map.put(CrashD.class, CheckCategory.CRASH);
+        map.put(CrashE.class, CheckCategory.CRASH);
+        map.put(CrashF.class, CheckCategory.CRASH);
+        map.put(CrashG.class, CheckCategory.CRASH);
+        map.put(CrashH.class, CheckCategory.CRASH);
+        map.put(CrashI.class, CheckCategory.CRASH);
+        map.put(ExploitA.class, CheckCategory.CRASH);
+        map.put(ExploitB.class, CheckCategory.CRASH);
+
+        // SPRINT
+        map.put(SprintA.class, CheckCategory.SPRINT);
+        map.put(SprintB.class, CheckCategory.SPRINT);
+        map.put(SprintC.class, CheckCategory.SPRINT);
+        map.put(SprintD.class, CheckCategory.SPRINT);
+        map.put(SprintE.class, CheckCategory.SPRINT);
+        map.put(SprintF.class, CheckCategory.SPRINT);
+        map.put(SprintG.class, CheckCategory.SPRINT);
+
+        // CHAT
+        map.put(ChatA.class, CheckCategory.CHAT);
+        map.put(ChatB.class, CheckCategory.CHAT);
+        map.put(ChatC.class, CheckCategory.CHAT);
+        map.put(ChatD.class, CheckCategory.CHAT);
+
+        CATEGORY_MAP = Collections.unmodifiableMap(map);
+    }
+
+    public static CheckCategory getCategory(Class<? extends AbstractCheck> checkClass) {
+        return CATEGORY_MAP.get(checkClass);
+    }
+
+    public static Map<Class<? extends AbstractCheck>, CheckCategory> getCategoryMap() {
+        return CATEGORY_MAP;
+    }
+
+    /**
+     * Get all checks in a given category from this player's check manager.
+     */
+    public List<AbstractCheck> getChecksByCategory(CheckCategory category) {
+        List<AbstractCheck> result = new ArrayList<>();
+        for (Map.Entry<Class<? extends AbstractCheck>, CheckCategory> entry : CATEGORY_MAP.entrySet()) {
+            if (entry.getValue() == category) {
+                AbstractCheck check = allChecks.get(entry.getKey());
+                if (check != null) result.add(check);
+            }
+        }
+        return result;
+    }
+
     public final ClassToInstanceMap<AbstractCheck> allChecks;
     private final ClassToInstanceMap<PacketCheck> packetChecks;
     private final ClassToInstanceMap<PositionCheck> positionChecks;

@@ -6,6 +6,8 @@ import ac.grim.grimac.api.GrimUser;
 import ac.grim.grimac.api.config.ConfigManager;
 import ac.grim.grimac.api.handler.ResyncHandler;
 import ac.grim.grimac.checks.Check;
+import ac.grim.grimac.checks.CheckCategory;
+import ac.grim.grimac.checks.SetbackMode;
 import ac.grim.grimac.checks.impl.aim.processor.AimProcessor;
 import ac.grim.grimac.checks.impl.misc.ClientBrand;
 import ac.grim.grimac.checks.impl.misc.TransactionOrder;
@@ -943,11 +945,53 @@ public class GrimPlayer implements GrimUser {
         for (AbstractCheck value : checkManager.allChecks.values()) value.reload();
         // reload punishment manager
         punishmentManager.reload(config);
+        // Apply category overrides (after punishment manager has set enabled states)
+        applyCategoryOverrides();
     }
 
     @Override
     public void reload() {
         reload(GrimAPI.INSTANCE.getConfigManager().getConfig());
+    }
+
+    private void applyCategoryOverrides() {
+        var configManager = GrimAPI.INSTANCE.getConfigManager();
+        var categoryEnabled = configManager.getCategoryEnabled();
+        var categorySetbackMode = configManager.getCategorySetbackMode();
+        var disabledChecks = configManager.getDisabledChecks();
+        SetbackMode globalMode = configManager.getGlobalSetbackMode();
+
+        for (AbstractCheck check : checkManager.allChecks.values()) {
+            CheckCategory category = CheckManager.getCategory(check.getClass());
+            if (category == null) continue; // Internal module, skip
+
+            // Category enabled override
+            if (!categoryEnabled.getOrDefault(category, true)) {
+                check.setEnabled(false);
+                if (check instanceof Check c) c.setSetbackMode(SetbackMode.DISABLED);
+                continue;
+            }
+
+            // Resolve effective mode: explicit category > global-setback-mode
+            // categorySetbackMode only contains entries for explicitly configured categories
+            SetbackMode effectiveMode = categorySetbackMode.getOrDefault(category, globalMode);
+
+            if (check instanceof Check c) {
+                if (effectiveMode != SetbackMode.SETBACK) {
+                    c.setSetbackMode(effectiveMode);
+                    if (effectiveMode == SetbackMode.DISABLED) {
+                        c.setEnabled(false);
+                    }
+                }
+            }
+
+            // disable-checks list (highest priority)
+            if (check.getCheckName() != null &&
+                    disabledChecks.contains(check.getCheckName().toLowerCase(Locale.ROOT))) {
+                check.setEnabled(false);
+                if (check instanceof Check c) c.setSetbackMode(SetbackMode.DISABLED);
+            }
+        }
     }
 
     @Override

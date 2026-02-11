@@ -247,5 +247,55 @@ history:
         username: root
         password: ""
 
+# ========== 检测分类控制 ==========
+# 按分类控制检测项。每个分类有:
+#   enabled: true/false - 是否启用该分类下的所有检测
+#   setback-mode: "inherit" (继承 global-setback-mode) / "setback" / "alert-only" / "disabled"
+# 优先级: disable-checks > 分类设置 > 单项设置 > global-setback-mode
+checks:
+  movement:
+    enabled: true
+    setback-mode: inherit
+  elytra:
+    enabled: true
+    setback-mode: inherit
+  combat:
+    enabled: true
+    setback-mode: inherit
+  vehicle:
+    enabled: true
+    setback-mode: inherit
+  timer:
+    enabled: true
+    setback-mode: inherit
+  badpackets:
+    enabled: true
+    setback-mode: inherit
+  breaking:
+    enabled: true
+    setback-mode: inherit
+  placing:
+    enabled: true
+    setback-mode: inherit
+  packet-order:
+    enabled: true
+    setback-mode: inherit
+  multi-actions:
+    enabled: true
+    setback-mode: inherit
+  crash:
+    enabled: true
+    setback-mode: inherit
+  sprint:
+    enabled: true
+    setback-mode: inherit
+  chat:
+    enabled: true
+    setback-mode: inherit
+
+# 按名称关闭特定子检测（最高优先级，覆盖一切）
+# 示例: ["ElytraF", "BadPacketsE", "FastBreak"]
+disable-checks: []
+
 # 不要调整这个
-config-version: 9
+config-version: 10

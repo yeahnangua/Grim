@@ -100,6 +100,23 @@ public final class GrimACBukkitLoaderPlugin extends JavaPlugin implements Platfo
     @Override
     public void onEnable() {
         GrimAPI.INSTANCE.start();
+
+        // Register check category GUI
+        getServer().getPluginManager().registerEvents(
+                new ac.grim.grimac.platform.bukkit.gui.ChecksGuiListener(), this);
+
+        // Wire up the /grim checks command to open the Bukkit GUI
+        ac.grim.grimac.command.commands.GrimChecks.setGuiOpener(sender -> {
+            Object nativeSender = sender.getNativeSender();
+            if (nativeSender instanceof org.bukkit.entity.Player bukkitPlayer) {
+                getServer().getScheduler().runTask(this, () ->
+                        new ac.grim.grimac.platform.bukkit.gui.ChecksCategoryGui(bukkitPlayer).open());
+            }
+        });
+
+        // Clear runtime GUI overrides on config reload
+        GrimAPI.INSTANCE.getConfigManager().setOnReloadHook(
+                ac.grim.grimac.platform.bukkit.gui.ChecksCategoryGui::clearRuntimeOverrides);
     }
 
     @Override

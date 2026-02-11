@@ -33,7 +33,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
 
     private boolean experimental;
     private @Setter boolean isEnabled;
-    private SetbackMode setbackMode = SetbackMode.SETBACK;
+    private @Setter SetbackMode setbackMode = SetbackMode.SETBACK;
 
     private boolean exemptPermission;
     private boolean noSetbackPermission;
