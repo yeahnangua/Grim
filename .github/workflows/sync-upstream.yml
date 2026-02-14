@@ -66,15 +66,22 @@ jobs:
         if: steps.merge.outputs.merge_ok == 'false'
         run: |
           BRANCH="sync-upstream/$(date +%Y%m%d)"
+          # Delete stale remote branch from previous failed runs
+          git push origin --delete "$BRANCH" 2>/dev/null || true
           git checkout -b "$BRANCH"
           git merge upstream/2.0 --no-edit || true
           # Commit conflict markers so the PR is visible
           git add -A
           git commit -m "sync: merge upstream (conflicts need manual resolution)" --no-verify || true
           git push origin "$BRANCH"
-          gh pr create \
-            --title "sync: upstream has ${{ steps.check.outputs.commit_count }} new commits (conflicts)" \
-            --body "$(cat <<'EOF'
+          # Skip PR creation if one already exists for this branch
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$EXISTING" ]; then
+            echo "PR #$EXISTING already exists for $BRANCH, skipping creation"
+          else
+            gh pr create \
+              --title "sync: upstream has ${{ steps.check.outputs.commit_count }} new commits (conflicts)" \
+              --body "$(cat <<'EOF'
           ## Upstream Sync
 
           Automatic merge from `GrimAnticheat/Grim:2.0` failed due to conflicts.
@@ -84,7 +91,8 @@ jobs:
           Conflicting files will have conflict markers (`<<<<<<<`).
           EOF
           )" \
-            --base 2.0 \
-            --head "$BRANCH"
+              --base 2.0 \
+              --head "$BRANCH"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
