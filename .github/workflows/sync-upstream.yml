@@ -79,20 +79,18 @@ jobs:
           if [ -n "$EXISTING" ]; then
             echo "PR #$EXISTING already exists for $BRANCH, skipping creation"
           else
-            gh pr create \
-              --title "sync: upstream has ${{ steps.check.outputs.commit_count }} new commits (conflicts)" \
-              --body "$(cat <<'EOF'
-          ## Upstream Sync
+            # Use REST API instead of GraphQL (fine-grained PATs lack GraphQL support)
+            gh api repos/${{ github.repository }}/pulls \
+              -f title="sync: upstream has ${{ steps.check.outputs.commit_count }} new commits (conflicts)" \
+              -f body="## Upstream Sync
 
-          Automatic merge from `GrimAnticheat/Grim:2.0` failed due to conflicts.
+          Automatic merge from \`GrimAnticheat/Grim:2.0\` failed due to conflicts.
 
           **Action required:** resolve conflicts manually, then merge this PR.
 
-          Conflicting files will have conflict markers (`<<<<<<<`).
-          EOF
-          )" \
-              --base 2.0 \
-              --head "$BRANCH"
+          Conflicting files will have conflict markers (\`<<<<<<<\`)." \
+              -f base="2.0" \
+              -f head="$BRANCH"
           fi
         env:
           GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
