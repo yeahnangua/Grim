@@ -1,0 +1,178 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1771058067154,
+  "projectRoot": "/Users/txw/IdeaProjects/Grim",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Kotlin",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "build.gradle.kts"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "gradle",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs"
+    ],
+    "gitBranches": {
+      "defaultBranch": "2.0",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "ac": {
+      "path": "ac",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1771058067141,
+      "keyFiles": []
+    },
+    "build": {
+      "path": "build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1771058067143,
+      "keyFiles": []
+    },
+    "buildSrc": {
+      "path": "buildSrc",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1771058067143,
+      "keyFiles": [
+        "build.gradle.kts",
+        "settings.gradle.kts"
+      ]
+    },
+    "bukkit": {
+      "path": "bukkit",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771058067143,
+      "keyFiles": [
+        "build.gradle.kts"
+      ]
+    },
+    "common": {
+      "path": "common",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771058067143,
+      "keyFiles": [
+        "build.gradle.kts"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 0,
+      "lastAccessed": 1771058067143,
+      "keyFiles": []
+    },
+    "fabric": {
+      "path": "fabric",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1771058067144,
+      "keyFiles": [
+        "build.gradle.kts",
+        "gradle.properties"
+      ]
+    },
+    "gradle": {
+      "path": "gradle",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1771058067144,
+      "keyFiles": []
+    },
+    "buildSrc/build": {
+      "path": "buildSrc/build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1771058067144,
+      "keyFiles": []
+    },
+    "buildSrc/src": {
+      "path": "buildSrc/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1771058067145,
+      "keyFiles": []
+    },
+    "bukkit/build": {
+      "path": "bukkit/build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1771058067145,
+      "keyFiles": []
+    },
+    "bukkit/src": {
+      "path": "bukkit/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1771058067145,
+      "keyFiles": []
+    },
+    "common/build": {
+      "path": "common/build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1771058067146,
+      "keyFiles": []
+    },
+    "common/src": {
+      "path": "common/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1771058067146,
+      "keyFiles": []
+    },
+    "fabric/build": {
+      "path": "fabric/build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1771058067146,
+      "keyFiles": []
+    },
+    "fabric/src": {
+      "path": "fabric/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1771058067147,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "common/src/main/java/ac/grim/grimac/command/CloudCommandService.java",
+      "accessCount": 2,
+      "lastAccessed": 1771151730765,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
