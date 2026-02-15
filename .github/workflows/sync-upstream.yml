@@ -19,7 +19,7 @@ jobs:
         with:
           ref: '2.0'
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SYNC_TOKEN }}
 
       - name: Configure git
         run: |
@@ -95,4 +95,4 @@ jobs:
               --head "$BRANCH"
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
