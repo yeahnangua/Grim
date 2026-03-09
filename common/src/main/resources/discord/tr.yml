@@ -1,13 +1,16 @@
 enabled: false
 webhook: ""
-embed-title: "**Grim Alert**"
+embed-title: "**Grim Uyarı**"
 embed-color: "#00FFFF"
 include-timestamp: true
+# Discord'un metin biçimlendirmesini bozmasını önlemek için değerlerdeki (istemci markaları gibi) ters tırnak işaretlerini (`) değiştirir.
+# Bu değiştirmeyi devre dışı bırakmak için "`" olarak ayarlayın.
+backtick-replacement-char: "ˋ"
 violation-content:
-    - "**Oyuncu**: %player%"
+    - "**Oyuncu**: `%player%`"
     - "**Kontrol**: %check%"
     - "**İhlaller**: %violations%"
     - "**Client Versiyonu**: %version%"
-    - "**Kullanılan Client**: %brand%"
+    - "**Client Markası**: `%brand%`"
     - "**Gecikme**: %ping%"
     - "**TPS**: %tps%"
