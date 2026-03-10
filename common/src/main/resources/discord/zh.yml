@@ -1,6 +1,9 @@
 # Webhook帮助: https://support.discord.com/hc/zh-cn/articles/228383668
 enabled: false
 webhook: ""
+# 设置为 `true` 以绕过 Discord 的 URL 格式验证。
+# 这将允许任何有效的 HTTPS URL（适用于代理或 Matrix 转发器）。
+disable-webhook-validation: false
 embed-title: "**Grim 警报**"
 embed-color: "#00FFFF"
 include-timestamp: true

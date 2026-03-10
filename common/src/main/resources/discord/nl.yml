@@ -1,6 +1,9 @@
 # Hulp bij webhooks: https://support.discord.com/hc/nl/articles/228383668
 enabled: false
 webhook: ""
+# Stel in op `true` om de URL-formaatcontrole van Discord te omzeilen.
+# Dit staat elke geldige HTTPS-URL toe (handig voor proxy's of Matrix-forwarders).
+disable-webhook-validation: false
 embed-title: "**Grim Waarschuwing**"
 embed-color: "#00FFFF"
 include-timestamp: true

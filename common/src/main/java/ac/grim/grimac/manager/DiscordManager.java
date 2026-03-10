@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 
 public class DiscordManager implements StartableInitable, ReloadableInitable {
     private static final Predicate<String> WEBHOOK_REGEX = Pattern.compile("^https://discord\\.com/api(?:/v\\d+)?/webhooks/\\d+/[\\w-]+(\\?thread_id=\\d+)?$").asMatchPredicate();
+    private static final Predicate<String> HTTPS_URL_REGEX = Pattern.compile("^https://[^/\\s]+/\\S+$").asMatchPredicate();
     private static final Duration timeout = Duration.ofSeconds(15);
     private static final HttpClient client = HttpClient.newBuilder().connectTimeout(timeout).build();
     private static final ConcurrentLinkedDeque<Pair<HttpRequest, CompletableFuture<Boolean>>> requests = new ConcurrentLinkedDeque<>();
@@ -87,12 +88,29 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
             }
 
             String webhook = config.getStringElse("webhook", "");
+            boolean strictValidation = !config.getBooleanElse("disable-webhook-validation", false);
 
-            if (!WEBHOOK_REGEX.test(webhook)) {
-                LogUtil.error("Discord webhook url does not follow expected format (https://discord.com/api/webhooks/<id>/<token>): " + webhook);
+            if (webhook.isEmpty()) {
                 url = null;
+            } else if (strictValidation) {
+                if (!WEBHOOK_REGEX.test(webhook)) {
+                    LogUtil.error("Discord webhook URL does not match expected format"
+                            + " (https://discord.com/api/webhooks/<id>/<token>): " + webhook);
+                    LogUtil.error("If you are using a proxy or custom endpoint,"
+                            + " set 'disable-webhook-validation: true' in the Discord config.");
+                    url = null;
+                } else {
+                    url = new URI(webhook);
+                }
             } else {
-                url = new URI(webhook);
+                if (!HTTPS_URL_REGEX.test(webhook)) {
+                    LogUtil.error("Discord webhook URL is not a valid HTTPS URL: " + webhook);
+                    url = null;
+                } else {
+                    LogUtil.info("Webhook validation disabled — using custom endpoint: "
+                            + webhook.substring(0, Math.min(webhook.length(), 40)) + "...");
+                    url = new URI(webhook);
+                }
             }
             // not adding these to the config since they may change in the future
             // mainly for just for allowing more customization

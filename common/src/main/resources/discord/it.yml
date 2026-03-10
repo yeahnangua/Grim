@@ -1,6 +1,9 @@
 # Guida sui webhook: https://support.discord.com/hc/it/articles/228383668
 enabled: false
 webhook: ""
+# Imposta su `true` per ignorare la validazione del formato URL di Discord.
+# Questo consente qualsiasi URL HTTPS valida (utile per proxy o forwarder Matrix).
+disable-webhook-validation: false
 embed-title: "**Grim Avviso**"
 embed-color: "#00FFFF"
 include-timestamp: true
